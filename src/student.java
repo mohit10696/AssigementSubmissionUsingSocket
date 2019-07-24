@@ -1,15 +1,18 @@
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class student {
 
-  public final static int SOCKET_PORT = 13267;      // you may change this
+  public final static int SOCKET_PORT = 1456;      // you may change this
   public final static String SERVER = "127.0.0.1";  // localhost
-  public final static String
-       FILE_TO_RECEIVED = "c:/temp/source-downloaded.pdf";  // you may change this, I give a
+  public static String
+  FILE_TO_RECEIVED = "H:/client/";  // you may change this, I give a
                                                             // different name because i don't want to
                                                             // overwrite the one used by server...
 
@@ -25,8 +28,13 @@ public class student {
     try {
       sock = new Socket(SERVER, SOCKET_PORT);
       System.out.println("Connecting...");
-
-      // receive file
+      DataInputStream din = new DataInputStream(sock.getInputStream());
+      DataOutputStream dout = new DataOutputStream(sock.getOutputStream());
+      System.out.println(din.readUTF());
+      Scanner sc = new Scanner(System.in);
+      String filename = sc.next();
+      FILE_TO_RECEIVED = FILE_TO_RECEIVED+filename;
+      dout.writeUTF(filename);
       byte [] mybytearray  = new byte [FILE_SIZE];
       InputStream is = sock.getInputStream();
       fos = new FileOutputStream(FILE_TO_RECEIVED);
